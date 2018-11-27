@@ -1,0 +1,77 @@
+extends layout
+
+block content
+    .row.mb-3
+        .col.col-md-12
+            .card
+                .card-body: h1.card-title Profile
+                ul.list-group.list-group-flush
+                    li.list-group-item Display Name: #{user.name}
+                    li.list-group-item Nickname: #{user.email}
+                    li.list-group-item ID: #{user.id}
+    
+    if users
+    .row.mb-3
+        .col.col-md-12
+            .card.border-primary.mt-3
+                h3.card-header Users
+                table.table
+                    thead
+                        th ID
+                    each current_user in users
+                        tr
+                            td: a.card-link(href='/user/#{current_user.id}') #{current_user.id}
+
+    .row.mb-3
+        .col.col-md-12
+            .card.border-primary.mt-3
+                h3.card-header Devices
+                table.table
+                    thead
+                        th ID
+                        th Name
+                        th Count
+                        th Last Seen
+                        th Owner
+                        th Set
+                    each device in devices
+                        tr
+                            td: a.card-link(href='/device/#{device.id}') #{device.id}
+                            td #{device.name}
+                            td #{device.api_count}
+                            td #{device.last_seen}
+                            if device.owner
+                                td: a.card-link(href='/user/#{device.owner.id}') #{device.owner.id}
+                            else
+                                td none
+                            td #{device.message_set?device.message_set.title:null}
+
+               
+
+      .card.mt-3
+        .card-body
+            h3.card-title Default Message Sets
+        ul.list-group.list-group-flush
+            each message_set in user.message_sets
+              li.list-group-item
+                //a(href="/user/#{user.id}/ms/#{message_set.id}") #{message_set.title} (#{message_set.id})
+                form(method='POST', action='/user/#{user.id}')
+                  input(type='hidden', name='message_set_id', value='#{message_set.id}')
+                  .input-group
+                    //.input-group-prepend
+                      .input-group-text New Set Title
+                    a.form-control(href="/user/#{user.id}/ms/#{message_set.id}") #{message_set.title} (#{message_set.id})
+                    .input-group-append
+                      button.btn.btn-danger(type='submit', name='button', value='remove_message_set') X
+                      //button.btn.btn-primary(type='submit', id='remove_message_set' value='remove_device') Delete Message 
+            li.list-group-item
+                form(method='POST', action='/user/#{user.id}')
+                  .input-group
+                    .input-group-prepend
+                      .input-group-text New Set Title
+                    input.form-control(type='text', name='message_set_title')
+                    .input-group-append
+                      button.btn.btn-primary(type='submit', name='button', value='create_message_set') New Set
+
+
+

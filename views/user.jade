@@ -1,0 +1,71 @@
+extends layout
+
+block content
+  .row.mb-3
+
+    .col.col-md-12
+      .card
+        .card-body
+          h1.card-title Profile
+        ul.list-group.list-group-flush
+          li.list-group-item Name: #{user.name}
+          li.list-group-item Email: #{user.email}
+          li.list-group-item ID: #{user.id}
+
+      .card.mt-3
+        .card-body
+            h3.card-title Claimed Devices
+        ul.list-group.list-group-flush
+            each device in user.devices
+              li.list-group-item
+                form(method='POST', action='/user/#{user.id}')
+                  input(type='hidden', name='device_id', value='#{device.id}')
+                  label.sr-only(for='deviceIdInput') Device ID
+                  .input-group
+                    //.input-group-prepend
+                      .input-group-text Device ID
+                    //input.form-control(type='text', name='device_id', value='#{device.id}')
+                    a.form-control(href="/device/#{device.id}") #{device.name} (#{device.id})
+                    .input-group-append
+                      button.btn.btn-danger(type='submit', name='button', value='remove_device') X
+               //li.list-group-item: a(href="/user/#{user.id}/d/#{device.id}") #{device.id}
+            li.list-group-item
+                form(method='POST', action='/user/#{user.id}')
+                  label.sr-only(for='deviceIdInput') Device ID
+                  .input-group
+                    .input-group-prepend
+                      .input-group-text Device ID
+                    input.form-control(type='text', name='device_id')
+                    .input-group-append
+                      button.btn.btn-primary(type='submit', name='button', value='claim_device') Claim Device
+
+      .card.mt-3
+        .card-body
+            h3.card-title Custom Message Sets
+        ul.list-group.list-group-flush
+            each message_set in user.message_sets
+              li.list-group-item
+                //a(href="/user/#{user.id}/ms/#{message_set.id}") #{message_set.title} (#{message_set.id})
+                form(method='POST', action='/user/#{user.id}')
+                  input(type='hidden', name='message_set_id', value='#{message_set.id}')
+                  .input-group
+                    //.input-group-prepend
+                      .input-group-text New Set Title
+                    a.form-control(href="/user/#{user.id}/ms/#{message_set.id}") #{message_set.title} (#{message_set.id})
+                    .input-group-append
+                      button.btn.btn-danger(type='submit', name='button', value='remove_message_set') X
+                      //button.btn.btn-primary(type='submit', id='remove_message_set' value='remove_device') Delete Message 
+            li.list-group-item
+                form(method='POST', action='/user/#{user.id}')
+                  .input-group
+                    .input-group-prepend
+                      .input-group-text New Set Title
+                    input.form-control(type='text', name='message_set_title')
+                    .input-group-append
+                      button.btn.btn-primary(type='submit', name='button', value='create_message_set') New Set
+
+      //.card.mt-3
+        .card-body
+          h3.card-title Debug
+          p #{JSON.stringify(auth)}
+

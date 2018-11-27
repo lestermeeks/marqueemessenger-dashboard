@@ -1,0 +1,63 @@
+extends layout
+
+block content
+  .row
+    .col.col-md-12
+      .card
+        .card-body
+          h2.card-title Device Info
+        ul.list-group.list-group-flush
+          li.list-group-item ID: #{device.id}
+          li.list-group-item Name: #{device.name}
+          li.list-group-item Location: #{device.location}
+          li.list-group-item Set Id: #{device.message_set}
+          li.list-group-item Last Seen: #{device.last_seen}
+          li.list-group-item First Seen: #{device.first_seen}
+          li.list-group-item Message Count: #{device.api_count}
+
+      .card.mt-3
+        .card-body
+          h2.card-title Device Settings
+        ul.list-group.list-group-flush
+          form(method='POST', action='#{base_url}')
+            li.list-group-item
+              .input-group.mb-1
+                .input-group-prepend
+                  .input-group-text Name
+                input.form-control(type='text', name='name_value', value='#{device.name}')
+                //.input-group-append
+                  button.btn.btn-primary(type='submit', name='button', value='update_name') Save
+            
+              .input-group.mb-1
+                .input-group-prepend
+                  .input-group-text Location
+                input.form-control(type='text', name='location_value', value='#{device.location}')
+                //.input-group-append
+                  button.btn.btn-primary(type='submit', name='button', value='update_location') Save
+
+              .input-group
+                .input-group-prepend
+                  label.input-group-text Message Set
+                select.form-control(name='message_set_id')
+                  option(value='null') Select A Message Set
+                  each message in default_messages
+                    if( device.message_set && message.id == device.message_set )
+                      option(value='#{message.id}', selected) *#{message.title} (#{message.id})
+                    else
+                      option(value='#{message.id}') *#{message.title} (#{message.id})
+                  if user
+                    each message, idx in user.message_sets
+                      if( device.message_set && message.id == device.message_set )
+                        option(value='#{message.id}', selected) #{message.title} (#{message.id})
+                      else
+                        option(value='#{message.id}') #{message.title} (#{message.id})
+                //.input-group-append
+                  button.btn.btn-primary(type='submit', name='button', value='update_message_set') Update
+            li.list-group-item 
+              button.btn.btn-outline-success.btn-block(type='submit', name='button', value='update_device') Save
+
+
+//  .row      
+//    .col.col-md-12
+//      .card
+//        p #{JSON.stringify(device)}

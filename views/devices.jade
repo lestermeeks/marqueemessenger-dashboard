@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  .row
+    .col.col-md-3
+      .card
+        img.card-image-top(src=user.picture)
+
+    .col.col-md-9
+      .card
+        .card-body
+            h1.card-title Devices
+        ul.list-group.list-group-flush
+            each device in userModel.devices
+               li.list-group-item: a(href="/device/#{device.id}") #{device.id}
+            li.list-group-item
+                form(method='POST')
+
+                  label.sr-only(for='deviceIdInput') Device ID
+                  .input-group
+                    .input-group-prepend
+                      .input-group-text Device ID
+                    input.form-control(type='text', name='device_id', id='deviceIdInput')
+                    .input-group-append
+                      button.btn.btn-primary(type='submit') Claim Device
+
+//  .row      
+//    .col
+//      .card
+//        .card-body
+//            .card-text #{JSON.stringify(userModel)}

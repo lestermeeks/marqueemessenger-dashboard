@@ -1,0 +1,57 @@
+extends layout
+
+block content
+  .row
+    .col.col-md-12
+      .card
+        .card-body
+          h1.card-title Message Set Info
+        ul.list-group.list-group-flush
+          li.list-group-item ID: #{message_set.id}
+          li.list-group-item 
+            form(method='POST', action='#{base_url}')
+              .input-group
+                .input-group-prepend
+                  .input-group-text Title
+                input.form-control(type='text', name='title_value', value='#{message_set.title}')
+                .input-group-append
+                  button.btn.btn-primary(type='submit', name='button', value='update_title') Save
+          li.list-group-item 
+            form(method='POST', action='#{base_url}')
+              .input-group
+                .input-group-prepend
+                  .input-group-text Desc
+                input.form-control(type='text', name='desc_value', value='#{message_set.description}')
+                .input-group-append
+                  button.btn.btn-primary(type='submit', name='button', value='update_desc') Save
+
+      .card.mt-3
+        .card-body
+          h1.card-title Messages
+        ul.list-group.list-group-flush
+          each message, idx in message_set.messages
+            li.list-group-item
+              form(method='POST', action='#{base_url}')
+                //input.form-control(type='text', id=message.id, value=message.value)
+                //button.btn.btn-primary(type='submit', id='remove_device' value='remove_device') Delete Message 
+
+                .input-group
+                  .input-group-prepend
+                    .input-group-text #{idx}
+                  input.form-control(type='text', name='message_value', value=message.value)
+                  input(type='hidden', name='message_idx', value='#{idx}')
+                  .input-group-append
+                    //button.btn.btn-primary(type='submit', name='button', value='message_down') D
+                    button.btn.btn-primary(type='submit', name='button', value='save_message') Save
+                    button.btn.btn-danger(type='submit', name='button', value='remove_message') X
+          li.list-group-item
+            form(method='POST', action='#{base_url}')
+              .input-group
+                input.form-control(type='text', name='message')
+                .input-group-append
+                  button.btn.btn-primary(type='submit', name='button', value='add_message') Add
+
+//  .row      
+//    .col.col-md-12
+//      .card
+//        p #{JSON.stringify(device)}
