@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const request = require('request');
 const session = require('express-session');
-const dotenv = require('dotenv');
+//const dotenv = require('dotenv');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const flash = require('connect-flash');
@@ -22,7 +22,7 @@ require('./models/MessageSetModel');
 require('./models/DeviceModel');
 require('./models/UserModel');
 
-dotenv.load();
+//dotenv.load();
 
 const index = require('./routes/index');
 const user = require('./routes/user');
