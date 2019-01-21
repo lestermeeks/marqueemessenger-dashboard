@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const request = require('request');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 //const dotenv = require('dotenv');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
@@ -73,15 +74,23 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(
-    session({
-      secret: 'shhhhhhhhh',
-      resave: true,
-      saveUninitialized: true
-    })
-  );
-  app.use(passport.initialize());
-  app.use(passport.session());
+//app.use(
+//    session({
+//      secret: 'shhhhhhhhh',
+//      resave: true,
+//      saveUninitialized: true
+//    })
+//  );
+app.use(session({
+  secret: 'shhhhhhhhh',
+  resave: true,
+  saveUninitialized: false,
+  store: new MongoStore({
+    mongooseConnection:  mongoose.connection
+  })
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(flash());
@@ -184,6 +193,7 @@ const intervalObj = setInterval(() => {
         last_minute_handled = current_minute;
 
         //console.log(current_hour + ':' +current_minute)
+        /*
         if(currentMinMod5 == 0)
         {
             getQotD(function(err,res,body)
@@ -192,13 +202,22 @@ const intervalObj = setInterval(() => {
                     console.log('error: ' + err);
                 else
                 {
+                  try
+                  {
                     var quoteResponse = JSON.parse(body);
                     goldenMessenger.SetMessage(goldenMessenger.MSG_QOTD_AUTHOR_IDX, quoteResponse.author );
                     goldenMessenger.SetMessage(goldenMessenger.MSG_QOTD_QUOTE_IDX, quoteResponse.quote);
-
+                  }
+                  catch (exception)
+                  {
+                    console.log('QOTD Parse Exception:');
+                    console.log(exception);
+                    console.log(body);
+                  }
                 }
             });
         }
+        */
         //if(currentMinMod5 == 1)
         {
             getCoinbaseSpotPrice('BTC-USD', function(err,res,body){
